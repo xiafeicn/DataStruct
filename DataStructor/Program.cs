@@ -12,7 +12,8 @@ namespace DataStructor
         {
             //new QuickSortClass().Sort();
             //new BubbleSort().Sort();
-            new InsertSort().InsertionSort();
+            //new InsertSort().InsertionSort();
+            new DirectSort().Sort();
         }
 
 
