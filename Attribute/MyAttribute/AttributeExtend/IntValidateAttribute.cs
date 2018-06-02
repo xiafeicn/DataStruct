@@ -23,7 +23,8 @@ namespace MyAttribute.AttributeExtend
 
         public override bool Validate(object oValue)
         {
-            return oValue != null && int.TryParse(oValue.ToString(), out int num) && num >= this._Min && num <= this._Max;
+            int num = 0;
+            return oValue != null && int.TryParse(oValue.ToString(), out  num) && num >= this._Min && num <= this._Max;
         }
     }
 
