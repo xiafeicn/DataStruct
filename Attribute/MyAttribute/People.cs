@@ -17,5 +17,10 @@ namespace MyAttribute
         [Obsolete("请不要使用这个了1")]
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public People()
+        {
+            GC.Collect();
+        }
     }
 }
