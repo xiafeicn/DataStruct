@@ -36,6 +36,19 @@ namespace MyReflection
         {
             try
             {
+                //#region dll 破解
+
+                // Assembly pojie = Assembly.Load(@"C:\Users\fei.xia\Downloads\8.Oraycn.Demos.VideoChat\dlls\OMCS.dll");//获取当前路径下的dll，不要后缀
+                //foreach (var item in pojie.GetModules())
+                //{
+                //    Console.WriteLine(item.Name);
+                //}
+                //foreach (var item in pojie.GetTypes())
+                //{
+                //    Console.WriteLine(item.Name);
+                //}
+                //#endregion
+
                 Console.WriteLine("欢迎来到.net高级班vip课程，今天是Eleven老师为大家带来的反射的课程");
                 #region Common
                 {
@@ -49,7 +62,7 @@ namespace MyReflection
                 {
                     Console.WriteLine("************************Reflection*****************");
                     Assembly assembly = Assembly.Load("Ruanmou.DB.MySql");//获取当前路径下的dll，不要后缀
-                    Assembly assembly1 = Assembly.LoadFile(@"D:\ruanmou\online9\20170607Advanced9Course2Reflection\MyReflection\MyReflection\bin\Debug\Ruanmou.DB.MySql.dll");
+                    //Assembly assembly1 = Assembly.LoadFile(@"D:\ruanmou\online9\20170607Advanced9Course2Reflection\MyReflection\MyReflection\bin\Debug\Ruanmou.DB.MySql.dll");
                     Assembly assembly2 = Assembly.LoadFrom("Ruanmou.DB.MySql.dll");
                     foreach (var item in assembly.GetModules())
                     {
