@@ -84,7 +84,7 @@ namespace Ruanmou.Redis.Service
         /// </summary>
         public string GetAndSetValue(string key, string value)
         {
-            return base.iClient.GetAndSetValue(key, value);
+            return base.iClient.GetAndSetEntry(key, value);
         }
         #endregion
 
@@ -94,7 +94,7 @@ namespace Ruanmou.Redis.Service
         /// </summary>
         public long GetLength(string key)
         {
-            return base.iClient.GetStringCount(key);
+            return base.iClient.GetSetCount(key);
         }
         /// <summary>
         /// 自增1，返回自增后的值
@@ -106,7 +106,7 @@ namespace Ruanmou.Redis.Service
         /// <summary>
         /// 自增count，返回自增后的值
         /// </summary>
-        public double IncrBy(string key, double count)
+        public double IncrBy(string key, int count)
         {
             return base.iClient.IncrementValueBy(key, count);
         }

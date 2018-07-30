@@ -1,6 +1,7 @@
 ﻿using Ruanmou.Redis.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -26,14 +27,24 @@ namespace MyRedisDemo
         static void Main(string[] args)
         {
             int count = 0;
+            Stopwatch sp = new Stopwatch();
+            long costTime = 0;
+            sp.Start();
             ParallelLoopResult result = Parallel.For(1, 20000, i =>
             {
                 count++;
-                Console.WriteLine(count);
+                sp.Reset();
+                sp.Start();
                 new RedisStringService().Get("name");
-                
+                Console.WriteLine(count + "耗时{0}毫秒", sp.ElapsedMilliseconds);
+                costTime += sp.ElapsedMilliseconds;
+                sp.Stop();
             });
+            sp.Stop();
+            Console.WriteLine("耗时{0}ms", costTime);
             Console.ReadKey();
         }
     }
+
+
 }

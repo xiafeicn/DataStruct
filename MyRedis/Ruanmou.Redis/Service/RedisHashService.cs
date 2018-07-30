@@ -114,7 +114,7 @@ namespace Ruanmou.Redis.Service
         /// <summary>
         /// 给hashid数据集key的value加countby，返回相加后的数据
         /// </summary>
-        public double IncrementValueInHash(string hashid, string key, double countBy)
+        public double IncrementValueInHash(string hashid, string key, int countBy)
         {
             return base.iClient.IncrementValueInHash(hashid, key, countBy);
         }
