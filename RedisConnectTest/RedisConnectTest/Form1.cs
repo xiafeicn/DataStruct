@@ -25,10 +25,14 @@ namespace RedisConnectTest
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            ParallelLoopResult result = Parallel.For(1, 10, i =>
+            ParallelLoopResult result = Parallel.For(1, 10000, i =>
             {
                 CacheManager.Get<string>("name");
             });
+            //ParallelLoopResult result = Parallel.For(1, 10, i =>
+            //{
+            //    CacheManager.Get<string>("name");
+            //});
         }
     }
 }

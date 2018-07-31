@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisConnectTest", "RedisCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GBI.Core.Cache", "GBI.Core.Cache\GBI.Core.Cache.csproj", "{B86624B5-CE4D-48CD-AD0E-C1B127E4841F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisConnectConsole", "RedisConnectConsole\RedisConnectConsole.csproj", "{C70AEC77-15DC-4A21-A68D-857E7DD876DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B86624B5-CE4D-48CD-AD0E-C1B127E4841F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B86624B5-CE4D-48CD-AD0E-C1B127E4841F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B86624B5-CE4D-48CD-AD0E-C1B127E4841F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70AEC77-15DC-4A21-A68D-857E7DD876DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70AEC77-15DC-4A21-A68D-857E7DD876DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70AEC77-15DC-4A21-A68D-857E7DD876DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70AEC77-15DC-4A21-A68D-857E7DD876DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
