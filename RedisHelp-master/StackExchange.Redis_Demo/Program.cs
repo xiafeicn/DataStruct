@@ -14,16 +14,15 @@ namespace StackExchange.Redis_Demo
         {
             RedisHelper redis = new RedisHelper(0);
             int count = 0;
-            Stopwatch sp = new Stopwatch();
             long costTime = 0;
             ParallelLoopResult result = Parallel.For(1, 20000, i =>
             {
                 count++;
-                sp.Reset();
+                Stopwatch sp = new Stopwatch();
                 sp.Start();
                 var aa = redis.StringGet("name");
                 sp.Stop();
-                Console.WriteLine(count + "耗时{0}毫秒", sp.ElapsedMilliseconds);
+                Console.WriteLine(count + "耗时{0}毫秒{1}", sp.ElapsedMilliseconds, aa);
                 costTime += sp.ElapsedMilliseconds;
             });
 
@@ -40,7 +39,7 @@ namespace StackExchange.Redis_Demo
             //var resukt = redis.StringSet("redis_string_test", str);
             //var str1 = redis.StringGet("redis_string_test");
             //redis.StringSet("redis_string_model", demo);
-            //var model = redis.StringGet<Demo>("redis_string_model");
+            var model = redis.StringGet<Demo>("redis_string_model");
 
             //for (int i = 0; i < 10; i++)
             //{

@@ -8,12 +8,12 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Threading;
 using Aspose.Words;
-using GBI.Metrix.Model;
 using GBI.Metrix.Model.Entity;
 using GBI.Metrix.Service;
 using GBI.Metrix.Service.Misc;
 using GBI.Metrix.Utility;
-using GBI.Metrix.ViewModel.Enum;
+using KolTool.Base;
+using KolTool.Model;
 using word;
 
 namespace KolTool
@@ -164,10 +164,10 @@ namespace KolTool
         }
 
 
-        protected void GeneralKol(Bookmark bookmark, DocumentBuilder builder, HcpEntity entity, string language)
+        protected void GeneralKol(Bookmark bookmark, DocumentBuilder builder, ResearcherEntity entity, string language)
         {
             var currentLog = new List<string>();
-            var orgList = HttpService.GetByIds<BaseEntity<OrgEntity>>(entity.link_organization, DataSetEnum.organization);
+            var orgList = HttpService.GetByIds<BaseEntity<InstitutionEntity>>(entity.link_organization, DataSetEnum.organization);
 
             Document insertDoc = new Document(templateKOL);//KOL模板
             DocumentBuilder insertBuilder = new DocumentBuilder(insertDoc);
@@ -179,7 +179,7 @@ namespace KolTool
                 insertDoc.Range.Replace("$HOSPITAL_LEVEL$", org.level.NullToString(), false, false);
                 insertDoc.Range.Replace("$FUDAN_SCORE$", org.rank.NullToString(), false, false);
 
-                var otherDeps = orgList.data.Except(new OrgEntity[] { org });
+                var otherDeps = orgList.data.Except(new InstitutionEntity[] { org });
                 if (otherDeps.Any())
                 {
                     var otherDepNames = string.Join(",", otherDeps.Select(t => GeneratePriorityLanguage(language, t.name_en, t.name_cn)));
@@ -286,7 +286,7 @@ namespace KolTool
             }
         }
 
-        public List<string> GetSocietyName(List<HcpOrg> listhHcpOrgs, List<OrgEntity> listOrg,
+        public List<string> GetSocietyName(List<HcpOrg> listhHcpOrgs, List<InstitutionEntity> listOrg,
          List<MiscEntity> associationDic, string language)
         {
             List<string> result = new List<string>();

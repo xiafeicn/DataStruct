@@ -163,7 +163,6 @@
             // tmrCheckStatus
             // 
             this.tmrCheckStatus.Interval = 10000;
-            //this.tmrCheckStatus.Tick += new System.EventHandler(this.tmrCheckStatus_Tick);
             // 
             // btnExport
             // 

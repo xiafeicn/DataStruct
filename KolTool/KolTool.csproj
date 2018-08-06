@@ -59,6 +59,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,6 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Consts.cs" />
+    <Compile Include="Base\HttpClientHolder.cs" />
+    <Compile Include="Base\HttpService.cs" />
+    <Compile Include="Base\JanusClientHelper.cs" />
+    <Compile Include="Base\JanusExtension.cs" />
+    <Compile Include="Base\JsonHelper.cs" />
     <Compile Include="Base\KolReportBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -77,6 +85,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Base\CaptureHelper.cs" />
+    <Compile Include="Base\LanguagePriorityHelper.cs" />
+    <Compile Include="Base\MiscEntity.cs" />
+    <Compile Include="Base\MiscEnum.cs" />
+    <Compile Include="Base\MiscService.cs" />
+    <Compile Include="Base\StringExtensions.cs" />
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,9 +103,36 @@
     <Compile Include="FrmTask.Designer.cs">
       <DependentUpon>FrmTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\BaseEntity.cs" />
+    <Compile Include="Model\CommonFilterEntity.cs" />
+    <Compile Include="Model\DataSetEnum.cs" />
+    <Compile Include="Model\DiseaseEntity.cs" />
+    <Compile Include="Model\Filter.cs" />
+    <Compile Include="Model\FilterEntity.cs" />
+    <Compile Include="Model\FilterInfo.cs" />
+    <Compile Include="Model\InstitutionEntity.cs" />
+    <Compile Include="Model\JanusBaseEntity.cs" />
+    <Compile Include="Model\LinkField.cs" />
+    <Compile Include="Model\NameById.cs" />
+    <Compile Include="Model\OrganizationENCN.cs" />
+    <Compile Include="Model\ResearcherEntity.cs" />
+    <Compile Include="Model\SaveSearch.cs" />
+    <Compile Include="Model\SearchPamarater.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLHelper.cs" />
+    <Compile Include="Sql\BaseSearch.cs" />
+    <Compile Include="Sql\CTSearch.cs" />
+    <Compile Include="Sql\DiseaseSearch.cs" />
+    <Compile Include="Sql\GrantSearch.cs" />
+    <Compile Include="Sql\GuideLineSearch.cs" />
+    <Compile Include="Sql\HcpSearch.cs" />
+    <Compile Include="Sql\JanusHelper.cs" />
+    <Compile Include="Sql\ModuleExtension.cs" />
+    <Compile Include="Sql\OrgSearch.cs" />
+    <Compile Include="Sql\PaperSearch.cs" />
+    <Compile Include="Sql\Sql.cs" />
+    <Compile Include="Sql\TargetSearch.cs" />
     <Compile Include="UCTaskPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -155,25 +195,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GBI.Metrix.Model\GBI.Metrix.Model.csproj">
-      <Project>{9bdee16a-d801-4cb3-a16e-1eb328c5955a}</Project>
-      <Name>GBI.Metrix.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GBI.Metrix.Service\GBI.Metrix.Service.csproj">
-      <Project>{34162e6d-e6e3-4d58-8573-325ff4fd42ac}</Project>
-      <Name>GBI.Metrix.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GBI.Metrix.Utility\GBI.Metrix.Utility.csproj">
-      <Project>{80b309b2-ec40-417a-be51-77a3e03162e5}</Project>
-      <Name>GBI.Metrix.Utility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GBI.Metrix.ViewModel\GBI.Metrix.ViewModel.csproj">
-      <Project>{9705e67a-1203-4ff6-8d4d-f9ec5a6524b8}</Project>
-      <Name>GBI.Metrix.ViewModel</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="APP_Data\phantomjs\capture.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

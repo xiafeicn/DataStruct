@@ -1,0 +1,35 @@
+﻿namespace KolTool.Base
+{
+    public enum MiscEnum
+    {
+        allarea,
+        ct_phase,
+        china_city,
+        china_province,
+        compound_type,
+        ct_country_type,
+        ct_recruitment_status,
+        ct_study_type,
+        grant_type,
+        hcp_academic_title,
+        hcp_admin_title,
+        hcp_professional_title,
+        hcp_association_title,
+        hcp_type,
+        organization_type,
+        target_type,
+        metrix_facet,
+        hospital_tiers,
+        fudan_departs,
+        hospital_department,
+        gcp_departs,
+        medical_institution,
+        guideline_type,
+        metrix_ct_ethic,
+        metrix_ct_source,
+        target_organism,
+        target_research_status,
+        metrix_ct_reasearch_result,
+        metrix_ct_related_paper
+    }
+}

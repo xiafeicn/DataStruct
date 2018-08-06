@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Aspose.Words;
-using GBI.Metrix.Model;
-using GBI.Metrix.Model.Entity;
 using GBI.Metrix.Service;
-using GBI.Metrix.ViewModel.Enum;
+using GBI.Metrix.Service.Extension;
 using KolTool;
+using KolTool.Base;
+using KolTool.Model;
 
 namespace KolTool
 {
@@ -102,7 +102,7 @@ namespace KolTool
             builder.Writeln(pamareter.language == "cn" ? "KOL 分析报告说明" : "KOL analysis reports description");
             //builder.Writeln("学科领域KOL TOP100");
             //builder.Writeln(pamareter.language == "cn" ? "KOL分析" : "KOL Analysis");
-            HcpEntity hcpEntity = HttpService.GetById<BaseEntity<HcpEntity>>(pamareter.hcpId, DataSetEnum.hcp).data.FirstOrDefault();
+            var hcpEntity = HttpService.GetById<BaseEntity<ResearcherEntity>>(pamareter.hcpId, DataSetEnum.hcp).data.FirstOrDefault();
             builder.ParagraphFormat.StyleIdentifier = StyleIdentifier.Heading2;
             builder.Writeln(hcpEntity.GetName(pamareter.language));
 
@@ -136,13 +136,13 @@ namespace KolTool
                 //        InsertDocument(bm.BookmarkStart.ParentNode, docEnd);
                 //    }
                 //}
-               
+
                 //if (bm.Text.StartsWith("学科领域KOL"))
                 //{
                 //    builder.MoveToBookmark(bm.Name, true, false);
                 //    builder.InsertBreak(BreakType.PageBreak);
                 //}
-                if (bm.Text.Equals(hcpEntity.GetName(pamareter.language),StringComparison.CurrentCultureIgnoreCase))
+                if (bm.Text.Equals(hcpEntity.GetName(pamareter.language), StringComparison.CurrentCultureIgnoreCase))
                 {
                     builder.MoveToBookmark(bm.Name, false, false);
                     this.ReportProgress(40, "开始请求报表数据...");
