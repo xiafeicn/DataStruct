@@ -1,0 +1,2 @@
+MVCWebMis.db 为框架的Sqlite数据库
+MVCWebMis.bak 为SqlServer2005的数据库备份文件

@@ -29,7 +29,7 @@ namespace RedisConnectConsole
             {
 
                 var a = CacheManager.Get<string>("name");
-                Console.WriteLine(count++ + a);
+                //Console.WriteLine(count++ + a);
             });
             Console.ReadKey();
         }

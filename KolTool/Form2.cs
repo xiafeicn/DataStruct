@@ -17,8 +17,8 @@ namespace KolTool
         public Form2()
         {
             InitializeComponent();
-            tmrCheckStatus.Interval = 1000 * 10;
-            tmrCheckStatus.Start();
+            //tmrCheckStatus.Interval = 1000 * 10;
+            //tmrCheckStatus.Start();
         }
 
 
@@ -31,27 +31,27 @@ namespace KolTool
         public static List<string> listFinishedTask = new List<string>();
         public int lastCount = 0;
         public int Counter = 0;
-        private void tmrCheckStatus_Tick(object sender, EventArgs e)
-        {
-            if (listAllTask.Count == listFinishedTask.Count)
-            {
-                Application.Restart();
-            }
-            if (lastCount == GetFileCount())
-            {
-                Counter++;
-                //超过5分钟重启
-                if (Counter > 30 && listAllTask.Count > listFinishedTask.Count)
-                {
-                    Application.Restart();
-                }
-            }
-            else
-            {
-                lastCount = GetFileCount();
-                Counter = 0;
-            }
-        }
+        //private void tmrCheckStatus_Tick(object sender, EventArgs e)
+        //{
+        //    if (listAllTask.Count == listFinishedTask.Count)
+        //    {
+        //        Application.Restart();
+        //    }
+        //    if (lastCount == GetFileCount())
+        //    {
+        //        Counter++;
+        //        //超过5分钟重启
+        //        if (Counter > 30 && listAllTask.Count > listFinishedTask.Count)
+        //        {
+        //            Application.Restart();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        lastCount = GetFileCount();
+        //        Counter = 0;
+        //    }
+        //}
 
         public int GetFileCount()
         {

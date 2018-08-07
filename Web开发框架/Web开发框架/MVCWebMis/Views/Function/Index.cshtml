@@ -1,0 +1,491 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>企业信息化平台管理系统</title>
+    @*添加Jquery EasyUI的样式*@
+    <link href="~/Content/JqueryEasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/JqueryEasyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+
+    <link href="~/Content/themes/Default/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/themes/Default/default.css" rel="stylesheet" type="text/css" />
+
+    @*添加Jquery，EasyUI和easyUI的语言包的JS文件*@
+    <script type="text/javascript" src="~/Content/JqueryEasyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Content/JqueryEasyUI/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="~/Content/JqueryEasyUI/locale/easyui-lang-zh_CN.js"></script>
+
+    @*日期格式的引用*@
+    <script src="~/Content/datapattern.js"></script>
+
+    <script type="text/javascript">
+	<!--
+        //重新加载树形结构（异步）
+        function initFunctionTree() {
+		    $("#loading").show();
+
+		    $('#txtPID').combotree({
+		        url: '/Function/GetAllTreeJson',
+		        onClick: function (node) {
+                    //
+		        }
+		    });
+
+		    $('#treeFunction').tree({
+		        url: '/Function/GetAllTreeJson',
+                onClick: function (node) {
+                    loadData(node.id); //树单击节点操作
+                }
+		    });
+
+		    $('#txtSystemType_ID').combotree({
+		        url: '/SystemType/GetTreeJson',
+		        onClick: function (node) {
+                    //
+		        },
+		        onLoadSuccess: function (node, data) {
+		            $("#txtSystemType_ID").combotree('setValue', data[0].id);
+		        }
+		    });
+		    $('#SystemType_ID1').combotree({
+		        url: '/SystemType/GetTreeJson',
+		        onClick: function (node) {
+		            //
+		        },
+		        onLoadSuccess: function (node, data) {
+		            $("#SystemType_ID1").combotree('setValue', data[0].id);
+		        }
+		    });
+
+		    $("#loading").fadeOut(500);
+        }
+
+        //加载制定的对象数据
+        function loadData(id) {
+            $("#loading").show();
+            $.getJSON("/Function/FindById?r=" + Math.random() + "&id=" + id, function (json) {
+                $("#txtID").val(json.ID);
+                $("#txtName").val(json.Name);
+                $("#txtControlID").val(json.ControlID);
+                $("#txtSortCode").val(json.SortCode);
+
+                //如果为-1标识它是顶部类型
+                if (json.PID == "-1") {
+                    $("#txtPID").combotree('setValue', json.SystemType_ID);
+                }
+                else {
+                    $("#txtPID").combotree('setValue', json.PID);
+                }
+
+                $("#txtSystemType_ID").combotree('setValue', json.SystemType_ID);
+                //$("#SystemType_ID").combotree('setValue', json.SystemType_ID);
+            });
+
+            $('#lbxRoles').empty();
+            $.getJSON("/Role/GetRolesByFunction?r=" + Math.random() + "&functionId=" + id, function (json) {
+                $.each(json, function (i, item) {
+                    $('#lbxRoles').append('<option value="' + item.ID + '">' + item.Name + '</option>');
+                });
+            });
+            $("#loading").fadeOut(500);
+        }
+
+        //保存对象数据
+        function saveData() {
+
+            if ($("#txtName").val() == "") {
+                $("#txtName").focus();
+                $.messager.alert("提示", "功能名称不能为空"); return;
+            }
+            var url = '/Function/Insert?r=' + Math.random();
+            var id = $("#txtID").val();
+            if (id != "") {
+                url = '/Function/Update?id=' + id;
+            }
+
+            var pid = $("#txtPID").combotree('getValue');
+            var systemtype = $('#txtSystemType_ID').combotree('getValue');
+            if (pid == systemtype) {
+                pid = "-1";//默认为顶级节点
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                async: false,
+                data: {
+                    Name: $("#txtName").val(), ControlID: $("#txtControlID").val(), SortCode: $("#txtSortCode").val(),
+                    PID: pid, SystemType_ID: systemtype
+                },
+                success: function (id) {
+                    $.messager.alert("提示", "操作成功！ ");
+                    initFunctionTree();
+
+                    if (id != "")
+                        loadData(id);
+                },
+                error: function (xhr, status, error) {
+                    $.messager.alert("提示", "操作失败"); //xhr.responseText
+                }
+            });
+        }
+
+        //批量添加功能列表
+        function batchAddData() {
+
+            $('#PID1').combotree({
+                url: '/Function/GetAllTreeJson',
+                onClick: function (node) {
+                }
+            });
+
+            $("#DivBatchAdd").dialog('open').dialog('setTitle', '批量添加多个功能');
+        }
+
+        //新增清空控件
+        function addData() {
+            $("#txtPID").val($("#txtID").val());
+            $("input[type=text][id*='txt']").val("");
+            $("textarea[id*='txt']").empty();
+            $("select[id*='lbx']").empty();
+        }
+
+        //删除当前记录
+        function delData() {
+            if ($("#txtID").val() == "") {
+                $.messager.alert("提示", "请选择记录");
+                return;
+            }
+
+            $.messager.confirm("删除确认信息", "您要确定删除该条记录吗？", function (deleteAction) {
+                if (deleteAction) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Function/Delete?r=' + Math.random(),
+                        async: false,
+                        data: { ID: $("#txtID").val() },
+                        success: function (msg) {
+                            if (msg == "true") {
+                                $.messager.alert("提示", "操作成功！ ");
+                            }
+                            else {
+                                $.messager.alert("提示", "删除失败，请您检查");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $.messager.alert("提示", "操作失败");
+                        }
+                    });
+                    initFunctionTree();
+                }
+            });
+        }
+
+		//对象居中的函数，调用例子：$("#loading").center();
+		jQuery.fn.center = function () {
+		    this.css("position", "absolute");
+		    this.css("top", Math.max(0, (($(window).height() - this.outerHeight()) / 2) +
+                                                $(window).scrollTop()) + "px");
+		    this.css("left", Math.max(0, (($(window).width() - this.outerWidth()) / 2) +
+                                                $(window).scrollLeft()) + "px");
+		    return this;
+		}
+		function expandAll(treeName) {
+		    var node = $('#' + treeName).tree('getSelected');
+		    if (node) {
+		        $('#' + treeName).tree('expandAll', node.target);
+		    }
+		    else {
+		        $('#' + treeName).tree('expandAll');
+		    }
+		}
+		function collapseAll(treeName) {
+		    var node = $('#' + treeName).tree('getSelected');
+		    if (node) {
+		        $('#' + treeName).tree('collapseAll', node.target);
+		    }
+		    else {
+		        $('#' + treeName).tree('collapseAll');
+		    }
+		}
+
+        //初始化对象
+		$(document).ready(function () {
+            //初始化功能树列表
+		    initFunctionTree();
+
+		    $("#functionExpand").bind("click", function () {
+		        expandAll("treeFunction");
+		    });
+		    $("#functionCollapse").bind("click", function () {
+		        collapseAll("treeFunction");
+		    });
+
+		    BindBatchAddEvent();//批量添加的保存操作
+
+		    $("#loading").center();//loading的图片显示居中
+		});
+
+		//绑定批量添加按钮的事件
+		function BindBatchAddEvent() {
+		    $("#btnBatchAddOK").click(function () {
+		        //判断表单的信息是否通过验证
+		        var validate = $("#ffBatchAdd").form('validate');
+		        if (validate == false) {
+		            return false;
+		        }
+
+		        var pid = $("#PID1").combotree('getValue');
+		        var systemtype = $('#SystemType_ID1').combotree('getValue');
+		        if (pid == systemtype) {
+		            pid = "-1";//默认为顶级节点
+		        }
+
+		        var postData = {
+		            Name: $("#Name1").val(), ControlID: $("#ControlID1").val(), SortCode: $("#SortCode1").val(),
+		            PID: pid, SystemType_ID: systemtype
+		        };
+
+		        //"add,delete,edit,view,export,import"
+		        var controlString = new Array();
+		        if ($("#chkAdd").prop('checked')) {
+		            controlString.push("add");
+		        }
+		        if ($("#chkDelete").prop('checked')) {
+		            controlString.push("delete");
+		        }
+		        if ($("#chkEdit").prop('checked')) {
+		            controlString.push("edit");
+		        }
+		        if ($("#chkView").prop('checked')) {
+		            controlString.push("view");
+		        }
+		        if ($("#chkImport").prop('checked')) {
+		            controlString.push("import");
+		        }
+		        if ($("#chkExport").prop('checked')) {
+		            controlString.push("export");
+		        }
+
+		        $.post("/Function/BatchAddFunction?controlString=" + controlString.join(',') , postData, function (data) {
+		            if (data = "true") {
+		                //添加成功  1.关闭弹出层
+		                $.messager.alert("提示", "批量添加成功");
+		                $("#DivBatchAdd").dialog("close");
+		                $("#ffBatchAdd").form("clear");
+
+		                initFunctionTree();//更新
+		            }
+		            else {
+		                $.messager.alert("提示", "添加失败，请您检查");
+		            }
+		        }).error(function () {
+		            $.messager.alert("提示", "您未被授权使用该功能，请联系管理员进行处理。", 'warning');
+		        });
+		    });
+		}
+		//-->
+        </script>
+    <style>
+        table.view {border:1px solid #A8CFEB;border-collapse: collapse;margin-bottom:5px;vertical-align:top}
+        .view th{ padding-left:10px;padding-right:5px;padding-top:5px;padding-bottom:5px;height:23px;width: 150px;border: 1px solid silver;background-color:#F1F6FF;}
+        .view td{ padding-left:10px;padding-right:5px;padding-top:5px;padding-bottom:5px;height:23px;width: 150px;border: 1px solid silver;background-color:#FAFCFF;}
+    </style>
+</head>
+<body>
+    <div id="loading" style="display: none;"><img alt="数据正在加载中..." src="~/Content/images/loading02.gif" /></div>
+    <div class="easyui-layout" style="width:700px;height:700px;" fit="true">
+        <div data-options="region:'west',split:true,title:'功能列表',iconCls:'icon-book'" style="width: 320px; padding: 1px;">
+            <div title="功能列表" style="padding:5px;height:auto" data-options="iconCls:'icon-organ'" >
+                <div style="padding: 1px; border: 1px solid #ddd;">                
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'" id="functionRefresh" onclick="initFunctionTree()">刷新</a>
+                    <a  href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-expand'" id="functionExpand" onclick="return false;">展开</a>
+                    <a  href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-collapse'" id="functionCollapse" onclick="return false;">折叠</a>
+                </div>
+                <div style="padding: 1px; border: 1px solid #ddd;">    
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-remove" id="btnDelete" onclick="delData()" >删除</a>
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-add" id="btnAdd" onclick="addData()" >添加</a>   
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-add" id="btnBatchAdd" onclick="batchAddData()" >批量添加</a>
+                </div>
+                <div>
+                    <ul id="treeFunction"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="tbEdit" data-options="region:'center',split:true,title:'功能详细信息',iconCls:'icon-book'" style="padding:5px;height:auto">  
+                <div title="功能详细信息" style="padding:5px;height:auto" data-options="iconCls:'icon-view'" >                    
+                    <form id="ffAdd" method="post" novalidate="novalidate">
+                        <table id="tbFunctionInfo" width="100%">
+                            <tr>
+                                <td align="left" style="width: 95px">
+                                    编号(<font color="red">*</font>)：
+                                </td>
+                                <td align="left">
+                                    <input id="txtID" style="width: 50px;background-color:#F0EAEA;" disabled type="text" name="ID">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="width: 95px">
+                                    名称(<font color="red">*</font>)：
+                                </td>
+                                <td align="left">
+                                    <input class="easyui-validatebox" type="text" id="txtName" name="Name" style="width: 100%" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="width: 95px">
+                                    上层功能(<font color="red">*</font>)：
+                                </td>
+                                <td align="left">
+                                    <input class="easyui-combobox"  id="txtPID" name="PID" style="width:300px;" panelHeight="500"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="width: 95px">
+                                    功能控件ID(<font color="red">*</font>)：
+                                </td>
+                                <td align="left">
+                                    <input id="txtControlID" style="width: 100%" class="easyui-validatebox" type="text"  maxlength="100" name="ControlID" ">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="txtSortCode">排序码：</label>
+                                </th>
+                                <td>
+                                    <input class="easyui-validatebox" style="width: 100%" type="text" id="txtSortCode" name="SortCode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="txtSystemType_ID">系统编号：</label>
+                                </th>
+                                <td>
+                                    <input class="easyui-combobox" type="text" id="txtSystemType_ID" name="SystemType_ID"  style="width:300px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="width: 95px">
+                                </td>
+                                <td align="right">
+                                    <a href="#" class="easyui-linkbutton" iconcls="icon-ok" id="btnSave" onclick="saveData()"
+                                        >保存</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+        </div>
+
+        <div id="tb" data-options="region:'east',split:true,title:'可操作角色',iconCls:'icon-book'" style="padding:5px;height:auto;width:230px"> 
+            <form id="Form1" method="post" >
+            <table>
+                <tr>
+                    <td valign="top">
+                        <table height="700px" width="200px">
+                            <tr valign="top">
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="17%" align="left" background="~/Content/Themes/Default/droit-42.jpg">
+                                                <img src="~/Content/Themes/Default/droit-41.jpg" width="50" height="31">
+                                            </td>
+                                            <td width="69%" background="~/Content/Themes/Default/droit-42.jpg">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td width="5%">
+                                                            <img src="~/Content/Themes/Default/droit-42.jpg" width="11" height="31">
+                                                        </td>
+                                                        <td width="95%" align="center">
+                                                            <span>可操作角色</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td width="14%" align="right" background="~/Content/Themes/Default/droit-42.jpg">
+                                                <img src="~/Content/Themes/Default/droit-43.jpg" width="42" height="31">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr height="100%" valign="top">
+                                <td>
+                                    <select id="lbxRoles" multiple  style="height: 640px; width: 200px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+   
+     <!--------------------------批量添加功能的弹出层---------------------------->
+    <div id="DivBatchAdd" class="easyui-dialog" style="width:580px;height:460px;padding:15px 15px"
+			closed="true" resizable="true" modal="true" data-options="iconCls: 'icon-add',buttons: '#dlg-buttons'">
+        <form id="ffBatchAdd" method="post" novalidate="novalidate">
+                <table id="tblEdit" class="view" style="width:520px;height:400px;">
+                    <tr>   
+                        <th>
+                            <label for="Name1">主功能名称(*)：</label>
+                        </th>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="Name1" name="Name" data-options="required:true,validType:'length[1,50]'" /> 
+                        </td>  
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="PID1">上层功能(*)：</label>
+                        </th>
+                        <td>
+                            <input class="easyui-combobox" type="text" id="PID1" name="PID" data-options="required:true,validType:'length[1,50]'" style="width:300px;" panelHeight="300"/>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <th>
+                            <label for="ControlID1">功能控件ID(*)：</label>
+                        </th>
+                        <td>
+                            <input class="easyui-validatebox" type="text" id="ControlID1" name="ControlID"  data-options="required:true,validType:'length[1,50]'" />
+                        </td>
+                    </tr>
+                    <tr> 
+                        <th>
+                            <label for="SystemType_ID1">系统类型编号(*)：</label>
+                        </th>
+                        <td>
+                            <input class="easyui-combobox" type="text" id="SystemType_ID1" name="SystemType_ID" style="width:300px;" />
+                        </td>
+                    </tr>
+                    <tr> 
+                        <th>
+                            <label>其他子功能：</label>
+                        </th>
+                        <td>
+                            <input type="checkbox" id="chkAdd" name="Add" checked="checked" />添加 &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" id="chkDelete" name="Delete"  checked="checked"/>删除 &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" id="chkEdit" name="Edit"  checked="checked"/>修改 &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" id="chkView" name="View"  checked="checked"/>查看 &nbsp;&nbsp;&nbsp;&nbsp;<br /><br />
+                            <input type="checkbox" id="chkImport" name="Import"  checked="checked"/>导入 &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" id="chkExport" name="Export"  checked="checked"/>导出 &nbsp;&nbsp;&nbsp;&nbsp;
+                        </td> 
+                    </tr>
+ 
+                    <tr>
+                        <td colspan="4" style="text-align:right; padding-top:10px">
+                            <input type="hidden" id="ID1" name="ID" />
+                            <a href="javascript:void(0)" class="easyui-linkbutton" id="btnBatchAddOK" data-options="iconCls: 'icon-ok'" >确定</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls: 'icon-cancel'" onclick="javascript:$('#DivBatchAdd').dialog('close')">关闭</a>
+                        </td>
+                    </tr>
+                </table>
+        </form>
+    </div>
+
+</body>
+</html>
